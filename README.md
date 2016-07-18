@@ -18,7 +18,7 @@ To run the `dev` build, run the following command:
 $ assemble dev
 ```
 
-This will build the html, watch source files, and server the `_gh_pages` directory through [browser-sync](http://www.browsersync.io/).
+This will build the html, watch source files, and serve the `_gh_pages` directory through [browser-sync](http://www.browsersync.io/).
 
 To only build the html, run the following command:
 
