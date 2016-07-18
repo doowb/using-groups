@@ -1,9 +1,8 @@
 ---
-title: Home Page
-slug: home
+title: Blog
+slug: blog
 ---
 {{! only show the 3 most recent posts}}
 {{#withFirst (sortBy (get "items" (posts)) "data.date" site.options.sortBy) 3}}
 {{> post this}}
 {{/withFirst}}
-
