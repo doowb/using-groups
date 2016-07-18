@@ -1,0 +1,7 @@
+<h1>Categories</h1>
+
+<ul>
+{{#each categories as |category name|}}
+  <li><a href="{{relative category.data.permalink}}">{{name}}</a></li>
+{{/each}}
+</ul>
