@@ -8,6 +8,7 @@
   "bugs": {
     "url": "https://github.com/doowb/using-groups/issues"
   },
+  "main": "assemblefile.js",
   "license": "MIT",
   "engines": {
     "node": ">=0.10.0"
