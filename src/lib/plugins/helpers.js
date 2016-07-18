@@ -1,10 +1,11 @@
 'use strict';
 var path = require('path');
 var Remarkable = require('remarkable');
-var Handlebars = require('handlebars');
 
 module.exports = function(options) {
   return function(app) {
+    var Handlebars = app.engine('hbs').Handlebars;
+
     // helpers
     app.helpers(require('handlebars-helpers')());
     app.helper('link-to', require('helper-link-to'));

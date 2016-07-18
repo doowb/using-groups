@@ -4,6 +4,7 @@ var path = require('path');
 var assemble = require('assemble');
 var permalinks = require('assemble-permalinks');
 var browserSync = require('browser-sync').create();
+var extend = require('extend-shallow');
 var watch = require('base-watch');
 
 var utils = require('./src/lib/utils');
