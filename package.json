@@ -1,0 +1,22 @@
+{
+  "name": "using-groups",
+  "description": "Example of using groups in assemble to create collections and list pages from front-matter.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/doowb/using-groups",
+  "author": "Brian Woodward (https://github.com/doowb)",
+  "repository": "doowb/using-groups",
+  "bugs": {
+    "url": "https://github.com/doowb/using-groups/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "groups",
+    "using"
+  ]
+}
