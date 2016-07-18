@@ -13,7 +13,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "postinstall": "npm uninstall templates && npm cache clear && npm i jonschlinkert/templates#groups"
   },
   "keywords": [
     "groups",
