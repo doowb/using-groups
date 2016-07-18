@@ -5,7 +5,6 @@ var assemble = require('assemble');
 var permalinks = require('assemble-permalinks');
 var browserSync = require('browser-sync').create();
 var watch = require('base-watch');
-var extend = require('extend-shallow');
 
 var utils = require('./src/lib/utils');
 var app = assemble();

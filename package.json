@@ -18,8 +18,19 @@
     "postinstall": "npm uninstall templates && npm cache clear && npm i jonschlinkert/templates#groups"
   },
   "keywords": [
+    "assemble",
+    "assemble-permalinks",
+    "collections",
+    "group",
+    "group-array",
+    "group-by",
     "groups",
-    "using"
+    "permalink",
+    "permalinks",
+    "templates",
+    "view",
+    "view-collections",
+    "views"
   ],
   "devDependencies": {
     "assemble": "^0.16.1",
@@ -28,6 +39,7 @@
     "browser-sync": "^2.13.0",
     "del-value": "^1.0.0",
     "get-value": "^2.0.6",
+    "gulp-format-md": "^0.1.9",
     "handlebars-helpers": "^0.7.3",
     "has-value": "^0.3.1",
     "helper-link-to": "^0.1.4",
@@ -35,5 +47,24 @@
     "remarkable": "^1.6.2",
     "set-value": "^0.3.3",
     "view-get-dest": "^0.1.1"
+  },
+  "verb": {
+    "layout": "empty",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "lint": {
+      "reflinks": true
+    },
+    "related": {
+      "list": []
+    },
+    "reflinks": [
+      "assemble-permalinks",
+      "templates"
+    ]
   }
 }
