@@ -60,7 +60,7 @@ Hit the [project repository](https://github.com/twbs/bootstrap) or [Sass reposit
 
 After reviewing the changelog, update your CDN links to point to the v3.3.5 files:
 
-{% highlight html %}
+{{#highlight "html" }}
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -69,7 +69,7 @@ After reviewing the changelog, update your CDN links to point to the v3.3.5 file
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-{% endhighlight %}
+{{/highlight}}
 
 <3,
 
