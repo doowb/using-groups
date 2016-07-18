@@ -3,8 +3,15 @@
 var path = require('path');
 var assemble = require('assemble');
 var permalinks = require('assemble-permalinks');
+var browserSync = require('browser-sync').create();
+var watch = require('base-watch');
+var extend = require('extend-shallow');
+
 var utils = require('./src/lib/utils');
 var app = assemble();
+app.use(watch());
+app.use(require('view-get-dest')());
+
 app.option('engine', 'hbs');
 app.option('layout', 'default');
 
@@ -17,6 +24,23 @@ var src = cwd('src');
 var base = cwd('_gh_pages');
 var structure = src('structure');
 var content = src('content');
+
+/**
+ * Set up site data that will be used in templates
+ */
+
+app.data({
+  site: {
+    base: '',
+    blog: 'blog',
+    title: 'Using Groups',
+    options: {
+      sortBy: {
+        reverse: true
+      }
+    }
+  }
+});
 
 /**
  * Add some plugins for custom helpers used in the templates in this example
@@ -41,6 +65,16 @@ app.onLoad(/.*posts\/.*\.md/, function(file, next) {
   next(null, file);
 });
 
+app.create('pages')
+  .use(permalinks(':toIndex()', {
+    toIndex: function() {
+      if (this.stem === 'index') {
+        return 'index.html';
+      }
+      return this.stem + '/index.html';
+    }
+  }));
+
 /**
  * Create a custom view collection used for templates that will be used when rendering lists of templates.
  * These lists are used for index and list pages (e.g. for tags and categories)
@@ -57,11 +91,11 @@ app.create('lists');
  */
 
 app.create('posts')
-  .use(permalinks(':toPaths(date)/:stem.html', {
+  .use(permalinks(':site.blog/:toPaths(date)/:stem.html', extend({}, app.cache.data, {
     toPaths: function(date) {
       return date.split('-').join('/');
     }
-  }));
+  })));
 
 /**
  * Add a `load` task that loads all the templates (structure), posts and pages (content), and
@@ -94,8 +128,8 @@ app.task('load', function(cb) {
   // We're going to create 2 new collections, one for `tags` and one for `categories`.
   // Each view collection can use a custom permalinks structure by setting the permalinks plugin function on the
   // `options.permalinks` function when creating the collection
-  group.create('tags', {permalinks: permalinks(':stem.html')});
-  group.create('categories', {permalinks: permalinks(':stem.html')});
+  group.create('tags', {permalinks: permalinks('tags/:stem.html')});
+  group.create('categories', {permalinks: permalinks('categories/:stem.html')});
   cb();
 });
 
@@ -106,7 +140,12 @@ app.task('load', function(cb) {
 app.task('pages', function() {
   return app.toStream('pages')
     .pipe(app.renderFile())
-    .pipe(app.dest(base()));
+    .pipe(app.dest(function(file) {
+      file.base = base.path;
+      file.path = path.resolve(file.base, file.data.permalink);
+      return base.path;
+    }))
+    .pipe(browserSync.stream());
 });
 
 /**
@@ -117,10 +156,11 @@ app.task('posts', function() {
   return app.toStream('posts')
     .pipe(app.renderFile())
     .pipe(app.dest(function(file) {
-      file.base = base('blog').path;
+      file.base = base.path;
       file.path = path.resolve(file.base, file.data.permalink);
-      return base('blog').path;
-    }));
+      return base.path;
+    }))
+    .pipe(browserSync.stream());
 });
 
 /**
@@ -135,20 +175,62 @@ app.task('groups', function() {
     .pipe(app.dest(function(file) {
       file.base = base.path;
       file.path = path.resolve(file.base, file.data.permalink);
-      return base(file.options.collection).path;
-    }));
+      return base.path;
+    }))
+    .pipe(browserSync.stream());
 });
 
 /**
- * Default task that runs the other tasks in the following order:
+ * Copy assets to the assets directory
+ */
+
+app.task('copy', function() {
+  return app.copy(src('assets/**/*').path, base('assets').path);
+});
+
+/**
+ * Serve files through browserSync to enable live-reloading
+ */
+
+app.task('serve', function(cb) {
+  browserSync.init({
+    port: 8080,
+    startPath: 'index.html',
+    server: {
+      baseDir: base.path
+    }
+  }, cb);
+});
+
+/**
+ * Watch for any file changes in the src path
+ */
+
+app.task('watch', function() {
+  app.watch(src('**/*').path, ['build']);
+});
+
+/**
+ * Build task that runs the other tasks in the following order:
+ *  - copy
  *  - load
  *  - pages
  *  - posts
  *  - groups
  */
 
-app.task('default', ['load', 'pages', 'posts', 'groups'], function(cb) {
-  cb();
-});
+app.task('build', ['copy', 'load', 'pages', 'posts', 'groups']);
+
+/**
+ * Dev task that will build and serve files through browser-sync and watch source files for changes to rebuild.
+ */
+
+app.task('dev', app.series('build', app.parallel(['serve', 'watch'])));
+
+/**
+ * Default task is an alias for `build`
+ */
+
+app.task('default', ['build']);
 
 module.exports = app;
