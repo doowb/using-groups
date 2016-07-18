@@ -1,11 +1,13 @@
 'use strict';
 var path = require('path');
 var Remarkable = require('remarkable');
+var Handlebars = require('handlebars');
 
 module.exports = function(options) {
   return function(app) {
     // helpers
     app.helpers(require('handlebars-helpers')());
+    app.helper('link-to', require('helper-link-to'));
 
     app.helper('relative', function(to) {
       var from = path.dirname(this.view.data.permalink);
@@ -22,7 +24,7 @@ ${options.fn(this)}${delim}
     });
 
     app.asyncHelper('markdown', function(options, cb) {
-      var md = new Remarkable();
+      var md = new Remarkable({ html: true, breaks: true });
       var str = options.fn(this);
       this.app.renderString(str, this.context, function(err, str) {
         if (err) return cb(err);
