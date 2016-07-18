@@ -1,0 +1,9 @@
+<div class="blog-post">
+  <h2 class="blog-post-title"><a href="{{link-to this}}">{{this.data.title}}</a></h2>
+  <p class="blog-post-meta">{{this.data.date}} by <a href="#">{{this.data.author}}</a></p>
+
+{{#markdown}}
+{{inline-view ..}}
+{{/markdown}}
+
+</div><!-- /.blog-post -->

@@ -1,14 +1,7 @@
-<h1>Category</h1>
+<h1>Category ({{this.category}})</h1>
 
-<ul>
-{{#each items as |item|}}
-  <li>
-    <div><a href="{{relative item.data.permalink}}">{{default item.data.title item.key}}</a></div>
-    <div>
-{{#markdown}}
-{{inline-view item}}
-{{/markdown}}
-    </div>
-  </li>
+{{#each (sortBy items "data.date" @root.site.options.sortBy) as |item|}}
+
+{{> post item}}
+
 {{/each}}
-</ul>

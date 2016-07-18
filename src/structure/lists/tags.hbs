@@ -2,6 +2,6 @@
 
 <ul>
 {{#each tags as |tag name|}}
-  <li><a href="{{relative tag.data.permalink}}">{{name}}</a></li>
+  <li><a href="{{link-to tag}}">{{name}}</a></li>
 {{/each}}
 </ul>
